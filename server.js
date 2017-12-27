@@ -19,13 +19,24 @@ mongoose.connect('mongodb://localhost/usersSchema');
 let UserSchema = new mongoose.Schema({
 	first_name: { type: String, require: true },
 	last_name: { type: String, require: true },
-	email: { type: String, require: true },
+	email: { type: String, unique: true, require: true },
 	password: { type: String, require: true },
 })
 mongoose.model('User', UserSchema);
 let User = mongoose.model('User');
 
 // ROUTES
+
+
+app.post('/newUser', (req,res) =>{
+	// console.log(req.body);
+	User.create(req.body, (err,user)=>{
+		if(err){
+			console.log(err);
+			return res.json(err);
+		}
+	})
+})
 
 app.all("*", (req, res, next) =>{
 	res.sendfile(path.resolve('./public/dist/index.html'))
